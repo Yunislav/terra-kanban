@@ -1,25 +1,25 @@
 import { CONSTANTS } from '../actions';
 
 let listID = 3;
-let cardID = 3;
+let cardID = 7;
 
 const initialState = [
   {
     title: 'Todo',
-    id: 0,
+    id: `list-${0}`,
     cards: [
       {
-        id: 0,
+        id: `card-${0}`,
         name: 'Task 1',
         description: 'Luna will go to the moon',
       },
       {
-        id: 1,
+        id: `card-${1}`,
         name: 'Task 2',
         description: 'Dude, its already on the moon',
       },
       {
-        id: 2,
+        id: `card-${2}`,
         name: 'Task 3',
         description: 'Nah, its going',
       },
@@ -27,25 +27,25 @@ const initialState = [
   },
   {
     title: 'Doing',
-    id: 1,
+    id: `list-${1}`,
     cards: [
       {
-        id: 0,
+        id: `card-${3}`,
         name: 'Task 1',
         description: 'Nah, its going',
       },
       {
-        id: 1,
+        id: `card-${4}`,
         name: 'Task 2',
         description: 'Nah, its going',
       },
       {
-        id: 2,
+        id: `card-${5}`,
         name: 'Task 3',
         description: 'Nah, its going',
       },
       {
-        id: 3,
+        id: `card-${6}`,
         name: 'Task 4',
         description: 'Nah, its going',
       },
@@ -61,7 +61,7 @@ const ListsReducer = (state = initialState, action) => {
       const newList = {
         title: action.payload,
         cards: [],
-        id: listID,
+        id: `list-${listID}`,
       };
       listID += 1;
       return [...state, newList];
@@ -70,7 +70,7 @@ const ListsReducer = (state = initialState, action) => {
       const updatedList = {
         title: action.payload,
         cards: [],
-        id: listID,
+        id: `list-${listID}`,
       };
       listID += 1;
       return [...state, updatedList];
@@ -80,7 +80,7 @@ const ListsReducer = (state = initialState, action) => {
       // eslint-disable-next-line no-case-declarations
       const newCard = {
         description: action.payload.description,
-        id: cardID,
+        id: `list-${cardID}`,
       };
       cardID += 1;
       // eslint-disable-next-line no-case-declarations

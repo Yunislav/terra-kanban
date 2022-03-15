@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
+import { DragDropContext } from 'react-beautiful-dnd';
 import List from './components/List';
 import ActionButton from './components/ActionButton';
 
@@ -9,15 +10,21 @@ const ListsContainer = styled.div`
   flex-direction: row;
 `;
 function App({ lists }) {
+  const handleOnDragEnd = () => {
+    // reordering logic
+  };
+
   return (
-    <div className="app">
-      <ListsContainer>
-        {lists.map((list) => (
-          <List listID={list.id} key={list.id} title={list.title} cards={list.cards} />
-        ))}
-        <ActionButton list />
-      </ListsContainer>
-    </div>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <div className="app">
+        <ListsContainer>
+          {lists.map((list) => (
+            <List listID={list.id} key={list.id} title={list.title} cards={list.cards} />
+          ))}
+          <ActionButton list />
+        </ListsContainer>
+      </div>
+    </DragDropContext>
   );
 }
 

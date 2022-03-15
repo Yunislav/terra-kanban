@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Droppable } from 'react-beautiful-dnd';
 import TodoCard from './TodoCard';
 import ActionButton from './ActionButton';
 import EditableField from './EditableField';
@@ -17,14 +18,25 @@ const ListContainer = styled.div`
 export default function List({ title, cards, listID }) {
   // console.log('cards', cards);
   return (
-    <ListContainer>
-      <EditableField title={title} />
-      {cards.map((card) => (
-        // console.log('hi', card);
-        <TodoCard key={card.id} description={card.description} name={card.name} />
-      ))}
-      <ActionButton listID={listID} />
-    </ListContainer>
+    <Droppable droppableId={String(listID)}>
+      {(provided) => (
+        <ListContainer {...provided.droppableProps} ref={provided.innerRef}>
+          <EditableField title={title} />
+          {cards.map((card, index) => (
+            // console.log('hi', card);
+            <TodoCard
+              index={index}
+              key={card.id}
+              id={card.id}
+              description={card.description}
+              name={card.name}
+            />
+          ))}
+          <ActionButton listID={listID} />
+          {provided.placeholder}
+        </ListContainer>
+      )}
+    </Droppable>
   );
 }
 
