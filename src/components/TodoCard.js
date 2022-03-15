@@ -8,25 +8,27 @@ import { Provider } from 'react-redux';
 
 const StyledCard = styled(Card)`
   margin-bottom: 8px;
-  cursor: pointer;
+  /* cursor: pointer; */
 `;
 
 export default function TodoCard({ name, description, id, index }) {
   return (
     <Draggable draggableId={String(id)} index={index}>
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <StyledCard>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="blue" component="div">
-                {name}
-              </Typography>
-              <Typography color="text.secondary" gutterBottom>
-                {description}
-              </Typography>
-            </CardContent>
-          </StyledCard>
-        </div>
+        <StyledCard
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <CardContent>
+            <Typography sx={{ fontSize: 14 }} color="blue" component="div">
+              {name}
+            </Typography>
+            <Typography color="text.secondary" gutterBottom>
+              {description}
+            </Typography>
+          </CardContent>
+        </StyledCard>
       )}
     </Draggable>
   );
