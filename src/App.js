@@ -4,18 +4,31 @@ import styled from '@emotion/styled';
 import { DragDropContext } from 'react-beautiful-dnd';
 import List from './components/List';
 import ActionButton from './components/ActionButton';
+import { sort } from './actions/listActions';
 
 const ListsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-function App({ lists }) {
-  const handleOnDragEnd = () => {
-    // reordering logic
+function App({ lists, dispatch }) {
+  const onDragEnd = (result) => {
+    const { source, destination, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    dispatch(
+      sort(
+        source.droppableId,
+        destination.droppableId,
+        source.index,
+        destination.index,
+        draggableId
+      )
+    );
   };
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <div className="app">
         <ListsContainer>
           {lists.map((list) => (

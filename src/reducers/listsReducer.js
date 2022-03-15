@@ -10,17 +10,17 @@ const initialState = [
     cards: [
       {
         id: `card-${0}`,
-        name: 'Task 1',
+        name: 'Luna',
         description: 'Luna will go to the moon',
       },
       {
         id: `card-${1}`,
-        name: 'Task 2',
+        name: 'Twitter',
         description: 'Dude, its already on the moon',
       },
       {
         id: `card-${2}`,
-        name: 'Task 3',
+        name: 'Whatever',
         description: 'Nah, its going',
       },
     ],
@@ -31,22 +31,22 @@ const initialState = [
     cards: [
       {
         id: `card-${3}`,
-        name: 'Task 1',
+        name: 'Random',
         description: 'Nah, its going',
       },
       {
         id: `card-${4}`,
-        name: 'Task 2',
+        name: 'Code',
         description: 'Nah, its going',
       },
       {
         id: `card-${5}`,
-        name: 'Task 3',
+        name: 'Title',
         description: 'Nah, its going',
       },
       {
         id: `card-${6}`,
-        name: 'Task 4',
+        name: 'Another Title',
         description: 'Nah, its going',
       },
     ],
@@ -56,8 +56,7 @@ const initialState = [
 // eslint-disable-next-line default-param-last
 const ListsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONSTANTS.ADD_LIST:
-      // eslint-disable-next-line no-case-declarations
+    case CONSTANTS.ADD_LIST: {
       const newList = {
         title: action.payload,
         cards: [],
@@ -65,27 +64,14 @@ const ListsReducer = (state = initialState, action) => {
       };
       listID += 1;
       return [...state, newList];
-    case CONSTANTS.UPDATE_LIST:
-      // eslint-disable-next-line no-case-declarations
-      const updatedList = {
-        title: action.payload,
-        cards: [],
-        id: `list-${listID}`,
-      };
-      listID += 1;
-      return [...state, updatedList];
-
-    // case CONSTANTS.DELETE_EMPTY_LIST:
-    case CONSTANTS.ADD_CARD:
-      // eslint-disable-next-line no-case-declarations
+    }
+    case CONSTANTS.ADD_CARD: {
       const newCard = {
         description: action.payload.description,
         id: `list-${cardID}`,
       };
       cardID += 1;
-      // eslint-disable-next-line no-case-declarations
       const newState = state.map((list) => {
-        console.log('action', action);
         if (list.id === action.payload.listID) {
           return {
             ...list,
@@ -95,7 +81,29 @@ const ListsReducer = (state = initialState, action) => {
         return list;
       });
       return newState;
-
+    }
+    case CONSTANTS.DRAG_HAPPEND: {
+      console.log('happend');
+      const {
+        droppableIdStart,
+        droppableIdEnd,
+        droppableIndexStart,
+        droppableIndexEnd,
+        draggableId,
+      } = action.payload;
+      const newState = [...state];
+      // in the same list
+      console.log(droppableIdStart);
+      console.log(droppableIdEnd);
+      if (droppableIdStart === droppableIdEnd) {
+        console.log('it is');
+        const list = state.find((listItem) => droppableIdStart === listItem.id);
+        const card = list.cards.splice(droppableIndexStart, 1);
+        // insert it
+        list.cards.splice(droppableIndexEnd, 0, ...card);
+      }
+      return newState;
+    }
     default:
       return state;
   }

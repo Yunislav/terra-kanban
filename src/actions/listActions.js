@@ -10,3 +10,23 @@ export const updateList = (title) => ({
   type: CONSTANTS.UPDATE_LIST,
   payload: title,
 });
+
+// source.draggableId, destination.droppableId, source.index, draggableId
+
+export const sort = (
+  droppableIdStart,
+  droppableIdEnd,
+  droppableIndexStart,
+  droppableIndexEnd,
+  draggableId,
+  type
+) => ({
+  type: CONSTANTS.DRAG_HAPPEND,
+  payload: {
+    droppableIdStart,
+    droppableIdEnd,
+    droppableIndexStart,
+    droppableIndexEnd,
+    draggableId,
+  },
+});

@@ -16,14 +16,12 @@ const ListContainer = styled.div`
 `;
 
 export default function List({ title, cards, listID }) {
-  // console.log('cards', cards);
   return (
     <Droppable droppableId={String(listID)}>
       {(provided) => (
         <ListContainer {...provided.droppableProps} ref={provided.innerRef}>
           <EditableField title={title} />
           {cards.map((card, index) => (
-            // console.log('hi', card);
             <TodoCard
               index={index}
               key={card.id}

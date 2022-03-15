@@ -12,7 +12,6 @@ const StyledCard = styled(Card)`
 `;
 
 export default function TodoCard({ name, description, id, index }) {
-  console.log('description', description);
   return (
     <Draggable draggableId={String(id)} index={index}>
       {(provided) => (
