@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { connect } from 'react-redux';
+import styled from '@emotion/styled';
+import List from './components/List';
+import ActionButton from './components/ActionButton';
 
-function App() {
+const ListsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+function App({ lists }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <ListsContainer>
+        {lists.map((list) => (
+          <List listID={list.id} key={list.id} title={list.title} cards={list.cards} />
+        ))}
+        <ActionButton list />
+      </ListsContainer>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  lists: state.lists,
+});
+
+export default connect(mapStateToProps)(App);
