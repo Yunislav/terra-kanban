@@ -135,7 +135,6 @@ const Reducer = (state = initialState, action) => {
         id: `list-${cardIDcount}`,
       };
       cardIDcount += 1;
-      console.log(newCard);
       const newState = state.map((list) => {
         if (list.id === action.payload.listID) {
           return {
@@ -166,7 +165,6 @@ const Reducer = (state = initialState, action) => {
         return card;
       });
       newState[index].cards = updatedCard;
-      console.log(newState);
       return newState;
     }
 
