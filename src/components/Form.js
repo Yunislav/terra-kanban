@@ -5,7 +5,7 @@ import Textarea from 'react-textarea-autosize';
 import Card from '@mui/material/Card';
 
 const Container = styled.div`
-  width: 284px;
+  width: 300px;
   margin-bottom: 8px;
 `;
 

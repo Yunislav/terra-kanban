@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import List from './components/List';
-import ActionButton from './components/ActionButton';
+import AddListOrCardButton from './components/AddListOrCardButton';
 import { sort } from './redux/BoardState';
 
 const ListsContainer = styled.div`
@@ -36,6 +36,7 @@ function App({ lists, cards, dispatch }) {
             <ListsContainer {...provided.droppableProps} ref={provided.innerRef}>
               {lists.map((list, index) => (
                 <List
+                  empty={list.cards.length === 0}
                   listID={list.id}
                   key={list.id}
                   title={list.title}
@@ -44,7 +45,7 @@ function App({ lists, cards, dispatch }) {
                 />
               ))}
               {provided.placeholder}
-              <ActionButton list />
+              <AddListOrCardButton list />
             </ListsContainer>
           )}
         </Droppable>

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import TextareaAutosize from 'react-textarea-autosize';
+// import TextareaAutosize from 'react-textarea-autosize';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+
 import { addList, addCard } from '../redux/BoardState';
 
 export const ActionButtonContainer = styled.div`
@@ -55,15 +57,23 @@ export const StyledButton = styled(Button)`
   margin-left: ${({ $primary }) => ($primary ? '0px' : '4px')};
 `;
 
+const StyledInput = styled.input`
+  resize: none;
+  width: 100%;
+  outline: none;
+  border: none;
+  overflow: hidden;
+`;
+
 const ActionButton = ({ list, listID, dispatch }) => {
   const [formOpen, setFormOpen] = useState(false);
   const [text, setText] = useState('');
-  const buttonText = list ? 'Add List' : 'Add Card';
-  const placeHolder = list ? 'Enter a column name' : 'Enter a note';
-  const buttontitle = list ? 'Add Column' : 'Add';
+  const [title, setTitle] = useState('');
+
   const openForm = () => setFormOpen(true);
   const closeForm = () => setFormOpen(false);
   const handleInputChange = (e) => setText(e.target.value);
+  const handleTitleChange = (e) => setTitle(e.target.value);
 
   const handleAddList = () => {
     if (text) {
@@ -75,7 +85,7 @@ const ActionButton = ({ list, listID, dispatch }) => {
 
   const handleAddCard = () => {
     if (text) {
-      dispatch(addCard(listID, text));
+      dispatch(addCard(listID, text, title));
       setText('');
       closeForm();
     }
@@ -83,9 +93,10 @@ const ActionButton = ({ list, listID, dispatch }) => {
 
   const renderForm = () => (
     <div className="InputForm" style={{ width: '300px' }}>
+      {!list && <StyledInput placeholder="enter title" onChange={handleTitleChange} />}
       <StyledActionCard>
         <StyledTextArea
-          placeholder={placeHolder}
+          placeholder={list ? 'Enter a column name' : 'Enter a note'}
           autoFocus
           value={text}
           onChange={handleInputChange}
@@ -93,7 +104,7 @@ const ActionButton = ({ list, listID, dispatch }) => {
       </StyledActionCard>
       <TextAreaButtonsContainer>
         <StyledButton onClick={list ? handleAddList : handleAddCard} $primary variant="contained">
-          {buttontitle}
+          {list ? 'Add Column' : 'Add'}
         </StyledButton>
         <StyledButton $primary={false} onClick={closeForm} variant="contained">
           Cancel
@@ -105,7 +116,7 @@ const ActionButton = ({ list, listID, dispatch }) => {
   const renderAddButton = () => (
     <ActionButtonContainer onClick={openForm}>
       <Icon>add</Icon>
-      <p>{buttonText}</p>
+      <p>{list ? 'Add List' : 'Add Card'}</p>
     </ActionButtonContainer>
   );
   return formOpen ? renderForm() : renderAddButton();

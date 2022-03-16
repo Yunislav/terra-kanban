@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import Icon from '@mui/material/Icon';
 import TodoCard from './TodoCard';
-import ActionButton from './ActionButton';
-import EditableField from './EditableField';
+import AddListOrCardButton from './AddListOrCardButton';
+import { modifyColumnName, deleteEmptyList } from '../redux/BoardState';
 
 const ListContainer = styled.div`
   background-color: var(--color-gray);
@@ -15,7 +16,76 @@ const ListContainer = styled.div`
   height: 100%;
 `;
 
-export default function List({ title, cards, listID, index }) {
+const StyledInput = styled.input`
+  width: 96%;
+  border: none;
+  outline-color: blue;
+  border-radius: 3px;
+  margin-bottom: 3px;
+  padding: 5px;
+`;
+
+const TitleContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const DeleteButton = styled(Icon)`
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0.4;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const ListTitle = styled.h4`
+  transition: background 0.3s ease-in;
+  ${TitleContainer}:hover & {
+    background: #ccc;
+  }
+`;
+
+function List({ title, cards, listID, index, empty, dispatch }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [listTitle, setListTitle] = useState(title);
+
+  const handleFocus = (e) => {
+    e.target.select();
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setListTitle(e.target.value);
+  };
+
+  const handleFinishEditing = (e) => {
+    setIsEditing(false);
+    dispatch(modifyColumnName(listID, listTitle));
+  };
+
+  const handleDeleteList = () => {
+    console.log('delete');
+    dispatch(deleteEmptyList(listID));
+  };
+
+  const renderEditInput = () => (
+    <form onSubmit={handleFinishEditing}>
+      <StyledInput
+        type="text"
+        value={listTitle}
+        onChange={handleChange}
+        autoFocus
+        onFocus={handleFocus}
+        onBlur={handleFinishEditing}
+      />
+    </form>
+  );
+
   return (
     <Draggable draggableId={String(listID)} index={index}>
       {(provided) => (
@@ -28,7 +98,14 @@ export default function List({ title, cards, listID, index }) {
             {/* eslint-disable-next-line no-shadow */}
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <EditableField title={title} />
+                {isEditing ? (
+                  renderEditInput()
+                ) : (
+                  <TitleContainer>
+                    <ListTitle onClick={() => setIsEditing(true)}>{listTitle}</ListTitle>
+                    {empty && <DeleteButton onClick={handleDeleteList}>delete</DeleteButton>}
+                  </TitleContainer>
+                )}
                 {cards.map((card, i) => (
                   <TodoCard
                     index={i}
@@ -40,7 +117,7 @@ export default function List({ title, cards, listID, index }) {
                   />
                 ))}
                 {provided.placeholder}
-                <ActionButton listID={listID} />
+                <AddListOrCardButton listID={listID} />
               </div>
             )}
           </Droppable>
@@ -50,4 +127,4 @@ export default function List({ title, cards, listID, index }) {
   );
 }
 
-connect()(ActionButton);
+export default connect()(List);
