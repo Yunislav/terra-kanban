@@ -10,7 +10,7 @@ const ListsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-function App({ lists, cards, dispatch }) {
+function App({ lists, dispatch }) {
   const onDragEnd = (result) => {
     const { source, destination, draggableId, type } = result;
     if (!destination) {

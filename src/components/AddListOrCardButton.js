@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-// import TextareaAutosize from 'react-textarea-autosize';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-
 import { addList, addCard } from '../redux/BoardState';
 
-export const ActionButtonContainer = styled.div`
+const ActionButtonContainer = styled.div`
   display: flex;
   direction: column;
   width: 300px;
@@ -30,7 +28,7 @@ export const ActionButtonContainer = styled.div`
   `}
 `;
 
-export const StyledTextArea = styled(TextareaAutosize)`
+const StyledTextArea = styled(TextareaAutosize)`
   resize: none;
   width: 100%;
   outline: none;
@@ -38,18 +36,18 @@ export const StyledTextArea = styled(TextareaAutosize)`
   overflow: hidden;
 `;
 
-export const StyledActionCard = styled(Card)`
+const StyledActionCard = styled(Card)`
   max-height: 265px;
   min-height: 58px;
   padding: 6px 8px 2px;
 `;
 
-export const TextAreaButtonsContainer = styled.div`
+const TextAreaButtonsContainer = styled.div`
   display: flex;
   margin-top: 8px;
 `;
 
-export const StyledButton = styled(Button)`
+const StyledButton = styled(Button)`
   flex: 1;
   color: white;
   background-color: ${({ $primary }) => ($primary ? '#5aac44' : '#21262d')};
@@ -58,11 +56,12 @@ export const StyledButton = styled(Button)`
 `;
 
 const StyledInput = styled.input`
-  resize: none;
-  width: 100%;
-  outline: none;
+  width: 97%;
   border: none;
-  overflow: hidden;
+  outline-color: blue;
+  border-radius: 3px;
+  margin-bottom: 3px;
+  padding: 5px;
 `;
 
 const ActionButton = ({ list, listID, dispatch }) => {
@@ -93,7 +92,7 @@ const ActionButton = ({ list, listID, dispatch }) => {
 
   const renderForm = () => (
     <div className="InputForm" style={{ width: '300px' }}>
-      {!list && <StyledInput placeholder="enter title" onChange={handleTitleChange} />}
+      {!list && <StyledInput placeholder="Enter title" onChange={handleTitleChange} />}
       <StyledActionCard>
         <StyledTextArea
           placeholder={list ? 'Enter a column name' : 'Enter a note'}
@@ -102,6 +101,7 @@ const ActionButton = ({ list, listID, dispatch }) => {
           onChange={handleInputChange}
         />
       </StyledActionCard>
+
       <TextAreaButtonsContainer>
         <StyledButton onClick={list ? handleAddList : handleAddCard} $primary variant="contained">
           {list ? 'Add Column' : 'Add'}

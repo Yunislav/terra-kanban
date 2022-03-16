@@ -49,29 +49,28 @@ const DeleteButton = styled(Icon)`
 
 const TodoCard = ({ description, id, listID, index, dispatch, name }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [cardText, setText] = useState(description);
+  const [cardDescription, setCardDescription] = useState('');
 
   const closeForm = () => {
     setIsEditing(false);
   };
 
   const handleChange = (e) => {
-    setText(e.target.value);
+    setCardDescription(e.target.value);
   };
 
   const saveCard = (e) => {
     e.preventDefault();
-    dispatch(editCard(id, listID, description));
+    dispatch(editCard(id, listID, cardDescription));
     setIsEditing(false);
   };
 
   const handleDeleteCard = () => {
-    console.log(id, listID);
     dispatch(deleteCard(id, listID));
   };
 
   const renderEditForm = () => (
-    <Form text={cardText} onChange={handleChange} closeForm={closeForm}>
+    <Form text={cardDescription} onChange={handleChange} closeForm={closeForm}>
       <CardButton onClick={saveCard}>Save</CardButton>
     </Form>
   );

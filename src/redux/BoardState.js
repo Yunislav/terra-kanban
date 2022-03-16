@@ -50,7 +50,7 @@ export const addList = (title) => ({
   payload: title,
 });
 
-// [] User can modify column name
+// [X] User can modify column name
 export const modifyColumnName = (listID, newTitle) => ({
   type: CONSTANTS.EDIT_COLUMN_NAME,
   payload: {
@@ -59,7 +59,7 @@ export const modifyColumnName = (listID, newTitle) => ({
   },
 });
 
-// - [ ] User can delete empty column
+// - [X] User can delete empty column
 export const deleteEmptyList = (listID) => ({
   type: CONSTANTS.DELETE_EMPTY_LIST,
   payload: {
@@ -94,18 +94,20 @@ export const addCard = (listID, description, title) => ({
   payload: { description, listID, title },
 });
 
+// - [ ] User can modify card details
 export const editCard = (id, listID, newText) => ({
   type: CONSTANTS.EDIT_CARD,
   payload: { id, listID, newText },
 });
 
+// - [ ] User can archive card
+// on github i couldnt find where the archived cards go, so i implemented this feature as a "delete"
 export const deleteCard = (id, listID) => ({
   type: CONSTANTS.DELETE_CARD,
   payload: { id, listID },
 });
 
 // reducer
-
 // eslint-disable-next-line default-param-last
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -145,10 +147,29 @@ const Reducer = (state = initialState, action) => {
       });
       return newState;
     }
-    case CONSTANTS.EDIT_CARD: {
-      const hi = 0;
-      return hi;
+    case CONSTANTS.DELETE_CARD: {
+      const newState = [...state];
+      const { listID, id } = action.payload;
+      const index = state.findIndex((el) => el.id === listID);
+      const updatedCards = state[index].cards.filter((card) => card.id !== id);
+      newState[index].cards = updatedCards;
+      return newState;
     }
+    case CONSTANTS.EDIT_CARD: {
+      const newState = [...state];
+      const { listID, id, newText } = action.payload;
+      const index = state.findIndex((el) => el.id === listID);
+      const updatedCard = state[index].cards.map((card) => {
+        if (card.id === id) {
+          card.description = newText;
+        }
+        return card;
+      });
+      newState[index].cards = updatedCard;
+      console.log(newState);
+      return newState;
+    }
+
     case CONSTANTS.DRAG_HAPPEND: {
       const { droppableIdStart, droppableIdEnd, droppableIndexStart, droppableIndexEnd, type } =
         action.payload;

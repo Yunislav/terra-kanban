@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Icon from '@mui/material/Icon';
-import Textarea from 'react-textarea-autosize';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Card from '@mui/material/Card';
 
 const Container = styled.div`
@@ -14,7 +14,7 @@ const StyledCard = styled(Card)`
   padding: 6px 8px 2px;
 `;
 
-const StyledTextArea = styled(Textarea)`
+const StyledTextArea = styled(TextareaAutosize)`
   resize: none;
   width: 100%;
   overflow: hidden;

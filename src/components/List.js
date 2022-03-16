@@ -64,12 +64,12 @@ function List({ title, cards, listID, index, empty, dispatch }) {
   };
 
   const handleFinishEditing = (e) => {
+    e.preventDefault();
     setIsEditing(false);
     dispatch(modifyColumnName(listID, listTitle));
   };
 
   const handleDeleteList = () => {
-    console.log('delete');
     dispatch(deleteEmptyList(listID));
   };
 
