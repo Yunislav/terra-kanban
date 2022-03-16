@@ -1,18 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import List from './components/List';
 import ActionButton from './components/ActionButton';
-import { sort } from './actions/listActions';
+import { sort } from './redux/BoardState';
 
 const ListsContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-function App({ lists, dispatch }) {
+function App({ lists, cards, dispatch }) {
   const onDragEnd = (result) => {
-    const { source, destination, draggableId } = result;
+    const { source, destination, draggableId, type } = result;
     if (!destination) {
       return;
     }
@@ -22,7 +22,8 @@ function App({ lists, dispatch }) {
         destination.droppableId,
         source.index,
         destination.index,
-        draggableId
+        draggableId,
+        type
       )
     );
   };
@@ -30,12 +31,23 @@ function App({ lists, dispatch }) {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="app">
-        <ListsContainer>
-          {lists.map((list) => (
-            <List listID={list.id} key={list.id} title={list.title} cards={list.cards} />
-          ))}
-          <ActionButton list />
-        </ListsContainer>
+        <Droppable droppableId="all-lists" direction="horizontal" type="list">
+          {(provided) => (
+            <ListsContainer {...provided.droppableProps} ref={provided.innerRef}>
+              {lists.map((list, index) => (
+                <List
+                  listID={list.id}
+                  key={list.id}
+                  title={list.title}
+                  cards={list.cards}
+                  index={index}
+                />
+              ))}
+              {provided.placeholder}
+              <ActionButton list />
+            </ListsContainer>
+          )}
+        </Droppable>
       </div>
     </DragDropContext>
   );
