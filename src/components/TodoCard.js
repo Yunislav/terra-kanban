@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import Icon from '@mui/material/Icon';
 import CardButton from './CardButton';
 import Form from './Form';
-import { editCard, deleteCard } from '../redux/BoardState';
+import { editCard, archiveCard } from '../redux/BoardState';
+import Switch from './Switch';
 
 const CardContainer = styled.div`
   margin: 0 0 8px 0;
@@ -47,7 +48,10 @@ const DeleteButton = styled(Icon)`
   }
 `;
 
-const TodoCard = ({ description, id, listID, index, dispatch, name }) => {
+const CardContentStyled = styled(CardContent)`
+  background-color: ${({ open }) => (open ? 'white' : 'lightgray')};
+`;
+const TodoCard = ({ description, id, listID, index, dispatch, name, date, open }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardDescription, setCardDescription] = useState('');
 
@@ -65,8 +69,9 @@ const TodoCard = ({ description, id, listID, index, dispatch, name }) => {
     setIsEditing(false);
   };
 
-  const handleDeleteCard = () => {
-    dispatch(deleteCard(id, listID));
+  // Im treating archiving the card as deleting it, just like github's kanban board
+  const handleArchiveCard = () => {
+    dispatch(archiveCard(id, listID));
   };
 
   const renderEditForm = () => (
@@ -74,6 +79,7 @@ const TodoCard = ({ description, id, listID, index, dispatch, name }) => {
       <CardButton onClick={saveCard}>Save</CardButton>
     </Form>
   );
+  // Name, Description, Created date, Status(Open, Closed), Order
 
   const renderCard = () => (
     <Draggable draggableId={String(id)} index={index}>
@@ -88,16 +94,18 @@ const TodoCard = ({ description, id, listID, index, dispatch, name }) => {
             <EditButton onMouseDown={() => setIsEditing(true)} fontSize="small">
               edit
             </EditButton>
-            <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
-              delete
+            <DeleteButton fontSize="small" onMouseDown={handleArchiveCard}>
+              archive
             </DeleteButton>
 
-            <CardContent>
+            <CardContentStyled open={open}>
               <Typography sx={{ fontSize: 14 }} color="blue" component="div">
                 {name}
               </Typography>
               <Typography>{description}</Typography>
-            </CardContent>
+              <Typography>Created on: {date}</Typography>
+              <Switch listID={listID} id={id} open={open} />
+            </CardContentStyled>
           </Card>
         </CardContainer>
       )}

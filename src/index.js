@@ -14,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: "Roboto Mono",monospace;
-    font-size: 1rem;
     font-weight: 300;
     line-height: 1.5;
     color: #181818;

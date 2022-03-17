@@ -1,37 +1,52 @@
 import { combineReducers } from 'redux';
+import moment from 'moment';
 
 const CONSTANTS = {
   ADD_CARD: 'ADD_CARD',
   EDIT_CARD: 'EDIT_CARD',
   ADD_LIST: 'ADD_LIST',
-  DELETE_CARD: 'DELETE_CARD',
+  ARCHIVE_CARD: 'ARCHIVE_CARD',
   EDIT_COLUMN_NAME: 'EDIT_COLUMN_NAME',
   DELETE_EMPTY_LIST: 'DELETE_EMPTY_LIST',
   DRAG_HAPPEND: 'DRAG_HAPPEND',
+  TOGGLE_STATUS: 'TOGGLE_STATUS',
 };
 
 let listIDcount = 3;
 let cardIDcount = 4;
 
+// Name, Description, Created date, Status(Open, Closed), Order = id
 const initialState = [
   {
     title: 'Todo',
     id: `list-${1}`,
     cards: [
       {
-        id: `card-${1}`,
-        name: 'Luna',
-        description: 'Luna will go to the moon',
+        name: 'Todo 1',
+        description: 'Make a todo list',
+        dateCreated: 'Mar 16th 22',
+        status: {
+          open: false,
+        },
+        id: `card-${1}`, // order
       },
       {
+        name: 'Todo 2',
+        description: 'Check off first thing on the list',
+        dateCreated: 'Mar 16th 22',
+        status: {
+          open: true,
+        },
         id: `card-${2}`,
-        name: 'Twitter',
-        description: 'Dude, its already on the moon',
       },
       {
+        name: 'Todo 3',
+        description: 'Reward yourself with a nap',
+        dateCreated: 'Mar 16th 22',
+        status: {
+          open: true,
+        },
         id: `card-${3}`,
-        name: 'Whatever',
-        description: 'Nah, its going higher',
       },
     ],
   },
@@ -94,16 +109,21 @@ export const addCard = (listID, description, title) => ({
   payload: { description, listID, title },
 });
 
-// - [ ] User can modify card details
+// - [X] User can modify card details
 export const editCard = (id, listID, newText) => ({
   type: CONSTANTS.EDIT_CARD,
   payload: { id, listID, newText },
 });
 
-// - [ ] User can archive card
-// on github i couldnt find where the archived cards go, so i implemented this feature as a "delete"
-export const deleteCard = (id, listID) => ({
-  type: CONSTANTS.DELETE_CARD,
+// - [X] User can identify / switch status of card
+export const toggleStatus = (listID, id, status) => ({
+  type: CONSTANTS.TOGGLE_STATUS,
+  payload: { listID, id, status },
+});
+
+// - [X] User can archive card
+export const archiveCard = (id, listID) => ({
+  type: CONSTANTS.ARCHIVE_CARD,
   payload: { id, listID },
 });
 
@@ -133,6 +153,10 @@ const Reducer = (state = initialState, action) => {
         description: action.payload.description,
         name: action.payload.title,
         id: `list-${cardIDcount}`,
+        dateCreated: moment().format('MMM Do YY'),
+        status: {
+          open: true,
+        },
       };
       cardIDcount += 1;
       const newState = state.map((list) => {
@@ -146,7 +170,20 @@ const Reducer = (state = initialState, action) => {
       });
       return newState;
     }
-    case CONSTANTS.DELETE_CARD: {
+    case CONSTANTS.TOGGLE_STATUS: {
+      const newState = [...state];
+      const { listID, id, status } = action.payload;
+      const index = state.findIndex((el) => el.id === listID);
+      const updatedCard = state[index].cards.map((card) => {
+        if (card.id === id) {
+          card.status.open = status;
+        }
+        return card;
+      });
+      newState[index].cards = updatedCard;
+      return newState;
+    }
+    case CONSTANTS.ARCHIVE_CARD: {
       const newState = [...state];
       const { listID, id } = action.payload;
       const index = state.findIndex((el) => el.id === listID);
@@ -167,7 +204,6 @@ const Reducer = (state = initialState, action) => {
       newState[index].cards = updatedCard;
       return newState;
     }
-
     case CONSTANTS.DRAG_HAPPEND: {
       const { droppableIdStart, droppableIdEnd, droppableIndexStart, droppableIndexEnd, type } =
         action.payload;

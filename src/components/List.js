@@ -113,6 +113,8 @@ function List({ title, cards, listID, index, empty, dispatch }) {
                     listID={listID}
                     id={card.id}
                     description={card.description}
+                    date={card.dateCreated}
+                    open={card.status.open}
                     name={card.name}
                   />
                 ))}
