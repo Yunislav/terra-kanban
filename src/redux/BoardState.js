@@ -62,7 +62,9 @@ const initialState = [
 // - [X] User can add column with name
 export const addList = (title) => ({
   type: CONSTANTS.ADD_LIST,
-  payload: title,
+  payload: {
+    title,
+  },
 });
 
 // [X] User can modify column name
@@ -141,7 +143,7 @@ const Reducer = (state = initialState, action) => {
     }
     case CONSTANTS.ADD_LIST: {
       const newList = {
-        title: action.payload,
+        title: action.payload.title,
         cards: [],
         id: `list-${listIDcount}`,
       };
@@ -149,9 +151,10 @@ const Reducer = (state = initialState, action) => {
       return [...state, newList];
     }
     case CONSTANTS.ADD_CARD: {
+      const { description, title, listID } = action.payload.listID;
       const newCard = {
-        description: action.payload.description,
-        name: action.payload.title,
+        description,
+        name: title,
         id: `card-${cardIDcount}`,
         dateCreated: moment().format('MMM Do YY'),
         status: {
@@ -160,7 +163,7 @@ const Reducer = (state = initialState, action) => {
       };
       cardIDcount += 1;
       const newState = state.map((list) => {
-        if (list.id === action.payload.listID) {
+        if (list.id === listID) {
           return {
             ...list,
             cards: [...list.cards, newCard],
