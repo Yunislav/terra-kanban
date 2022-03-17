@@ -35,7 +35,7 @@ const StyledIcon = styled(Icon)`
 `;
 
 const Form = ({ list, text = '', onChange, closeForm, children }) => {
-  const placeholder = list ? 'Enter list title...' : 'Enter a title for this card...';
+  const placeholder = list ? 'Enter list title...' : 'Enter a description for this card';
 
   const handleFocus = (e) => {
     e.target.select();
