@@ -152,7 +152,7 @@ const Reducer = (state = initialState, action) => {
       const newCard = {
         description: action.payload.description,
         name: action.payload.title,
-        id: `list-${cardIDcount}`,
+        id: `card-${cardIDcount}`,
         dateCreated: moment().format('MMM Do YY'),
         status: {
           open: true,
