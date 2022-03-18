@@ -1,3 +1,3 @@
 # Kanban Board
 
-This project was build with React and Redux
+This project was built with React and Redux
