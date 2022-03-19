@@ -52,6 +52,7 @@ const CardContentStyled = styled(CardContent)`
   background-color: ${({ open }) => (open ? 'white' : 'lightgray')};
 `;
 const TodoCard = ({ description, id, listID, index, dispatch, name, date, open }) => {
+  console.log(description);
   const [isEditing, setIsEditing] = useState(false);
   const [cardDescription, setCardDescription] = useState('');
 
