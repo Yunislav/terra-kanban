@@ -151,7 +151,9 @@ const Reducer = (state = initialState, action) => {
       return [...state, newList];
     }
     case CONSTANTS.ADD_CARD: {
-      const { description, title, listID } = action.payload.listID;
+      console.log('hey');
+      const { description, title, listID } = action.payload;
+      console.log(description);
       const newCard = {
         description,
         name: title,
